@@ -37,7 +37,6 @@ const csa = new ClusterAutoscaler(this, 'demo-cluster-autoscaler', {
 | `nodeGroups` | A list of `AutoScalingGroup` (`@aws-cdk/aws-autoscaling`) to include as part of the cluser autoscaler. | N/A |
 | `version` | The version of the Cluster Autoscaler to deploy. Find the latest version based on your Kubernetes [version here](https://github.com/kubernetes/autoscaler/releases).  | `v1.14.6` |
 
-
 ## Full Example
 
 ```typescript
