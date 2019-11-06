@@ -22,10 +22,13 @@ export class ClusterAutoscaler extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: ClusterAutoscalerProps) {
     super(scope, id);
 
+    // default the version to the latest version
     if(!props.version) {
       props.version = 'v1.14.6';
     }
 
+    // define the cluster autoscaler policy statements
+    // https://docs.aws.amazon.com/en_pv/eks/latest/userguide/cluster-autoscaler.html#ca-create-ngs
     const policyStatement = new iam.PolicyStatement();
     policyStatement.addResources('*');
     policyStatement.addActions(
@@ -38,17 +41,20 @@ export class ClusterAutoscaler extends cdk.Construct {
       'ec2:DescribeLaunchTemplateVersions'
     );
 
+    // create the policy based on the statements
     const policy = new iam.Policy(this, 'cluster-autoscaler-policy', {
       policyName: 'ClusterAutoscalerPolicy',
       statements: [ policyStatement ]
     });
 
+    // loop through all of the node groups and attach the policy
     props.nodeGroups.forEach(element => {
       cdk.Tag.add(element, 'k8s.io/cluster-autoscaler/' + props.cluster.clusterName, 'owned', { applyToLaunchedInstances: true });
       cdk.Tag.add(element, 'k8s.io/cluster-autoscaler/enabled', 'true', { applyToLaunchedInstances: true });
-      element.role.attachInlinePolicy(policy);
+      policy.attachToRole(element.role);
     });
 
+    // define the Kubernetes Cluster Autoscaler manifests
     this.clusterautoscaler = new eks.KubernetesResource(this, 'cluster-autoscaler-manifest', {
       cluster: props.cluster,
       manifest: [

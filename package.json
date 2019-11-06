@@ -1,6 +1,6 @@
 {
   "name": "@arhea/aws-cdk-eks-cluster-autoscaler",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A CDK Construct Library for Cluster Autoscaler.",
   "main": "lib/index.js",
   "scripts": {
