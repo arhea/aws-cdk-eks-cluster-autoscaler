@@ -1,6 +1,20 @@
 # AWS CDK EKS Cluster Autoscaler
 This module makes it easy to deploy and manage Cluster Autoscaler from AWS CDK for your EKS clusters. This module is designed based on the guidance provided in the [AWS documentation](https://docs.aws.amazon.com/en_pv/eks/latest/userguide/cluster-autoscaler.html).
 
+## Installation
+
+You can install this with `npm` or `yarn`.
+
+```bash
+npm i `@arhea-aws-cdk-eks-cluster-autoscaler` --save
+```
+
+or
+
+```bash
+yarn add `@arhea-aws-cdk-eks-cluster-autoscaler`
+```
+
 ## Usage
 
 | Option | Description | Default |
