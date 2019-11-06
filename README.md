@@ -1,3 +1,15 @@
+# AWS CDK EKS Cluster Autoscaler
+This module makes it easy to deploy and manage Cluster Autoscaler from AWS CDK for your EKS clusters.
+
+## Usage
+
+```typescript
+  const csa = new ClusterAutoscaler(this, 'k8s-cluster-autoscaler', {
+    cluster: cluster, // your EKS cluister
+    nodegroups: [ ng ] // a list of your node groups
+  });
+```
+
 # Useful commands
 
  * `npm run build`   compile typescript to js
