@@ -5,9 +5,11 @@ import autoscaling = require('@aws-cdk/aws-autoscaling');
 
 export interface ClusterAutoscalerProps {
 
-  readonly cluster: eks.Cluster;
+  cluster: eks.Cluster;
 
-  readonly nodegroups: Array<autoscaling.AutoScalingGroup>;
+  nodeGroups: Array<autoscaling.AutoScalingGroup>;
+
+  version?: String;
 
 }
 
@@ -19,6 +21,10 @@ export class ClusterAutoscaler extends cdk.Construct {
 
   constructor(scope: cdk.Construct, id: string, props: ClusterAutoscalerProps) {
     super(scope, id);
+
+    if(!props.version) {
+      props.version = 'v1.14.6';
+    }
 
     const policyStatement = new iam.PolicyStatement();
     policyStatement.addResources('*');
@@ -37,7 +43,7 @@ export class ClusterAutoscaler extends cdk.Construct {
       statements: [ policyStatement ]
     });
 
-    props.nodegroups.forEach(element => {
+    props.nodeGroups.forEach(element => {
       cdk.Tag.add(element, 'k8s.io/cluster-autoscaler/' + props.cluster.clusterName, 'owned', { applyToLaunchedInstances: true });
       cdk.Tag.add(element, 'k8s.io/cluster-autoscaler/enabled', 'true', { applyToLaunchedInstances: true });
       element.role.attachInlinePolicy(policy);
@@ -233,6 +239,9 @@ export class ClusterAutoscaler extends cdk.Construct {
             namespace: 'kube-system',
             labels: {
               app: 'cluster-autoscaler'
+            },
+            annotations: {
+              'cluster-autoscaler.kubernetes.io/safe-to-evict': 'false'
             }
           },
           spec: {
@@ -256,7 +265,7 @@ export class ClusterAutoscaler extends cdk.Construct {
                 serviceAccountName: 'cluster-autoscaler',
                 containers: [
                    {
-                      image: 'k8s.gcr.io/cluster-autoscaler:v1.12.3',
+                      image: 'k8s.gcr.io/cluster-autoscaler:' + props.version,
                       name: 'cluster-autoscaler',
                       resources: {
                          limits: {
@@ -269,13 +278,15 @@ export class ClusterAutoscaler extends cdk.Construct {
                          }
                       },
                       command: [
-                         './cluster-autoscaler',
-                         '--v=4',
-                         '--stderrthreshold=info',
-                         '--cloud-provider=aws',
-                         '--skip-nodes-with-local-storage=false',
-                         '--expander=least-waste',
-                         '--node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/' + props.cluster.clusterName
+                        './cluster-autoscaler',
+                        '--v=4',
+                        '--stderrthreshold=info',
+                        '--cloud-provider=aws',
+                        '--skip-nodes-with-local-storage=false',
+                        '--expander=least-waste',
+                        '--node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/' + props.cluster.clusterName,
+                        '--balance-similar-node-groups',
+                        '--skip-nodes-with-system-pods=false'
                       ],
                       volumeMounts: [
                          {

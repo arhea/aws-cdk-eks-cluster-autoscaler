@@ -1,7 +1,13 @@
 # AWS CDK EKS Cluster Autoscaler
-This module makes it easy to deploy and manage Cluster Autoscaler from AWS CDK for your EKS clusters.
+This module makes it easy to deploy and manage Cluster Autoscaler from AWS CDK for your EKS clusters. This module is designed based on the guidance provided in the [AWS documentation](https://docs.aws.amazon.com/en_pv/eks/latest/userguide/cluster-autoscaler.html).
 
 ## Usage
+
+| Option | Description | Default |
+|---|---|---|
+| `cluster` | The `@aws-cdk/aws-eks` cluster instance where this Cluster Autoscaler should be deployed. | N/A |
+| `nodeGroups` | A list of `AutoScalingGroup` (`@aws-cdk/aws-autoscaling`) to include as part of the cluser autoscaler. | N/A |
+| `version` | The version of the Cluster Autoscaler to deploy. Find the latest version based on your Kubernetes [version here](https://github.com/kubernetes/autoscaler/releases).  | `v1.14.6` |
 
 ```typescript
 const vpc = new ec2.Vpc(this, 'demo-vpc', {
@@ -38,6 +44,6 @@ const ng = cluster.addCapacity('demo-ng1', {
 
 const csa = new ClusterAutoscaler(this, 'demo-cluster-autoscaler', {
   cluster: cluster, // your EKS cluster
-  nodegroups: [ ng ] // a list of your node groups
+  nodeGroups: [ ng ] // a list of your node groups
 });
 ```

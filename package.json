@@ -1,13 +1,11 @@
 {
-  "name": "aws-cdk-eks-cluster-autoscaler",
-  "version": "0.1.0",
+  "name": "@arhea/aws-cdk-eks-cluster-autoscaler",
+  "version": "0.2.0",
   "description": "A CDK Construct Library for Cluster Autoscaler.",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w",
-    "test": "jest",
-    "cdk": "cdk"
+    "watch": "tsc -w"
   },
   "keywords": [
     "aws",
@@ -17,9 +15,7 @@
     "cluster-autoscaler",
     "autoscaling"
   ],
-  "author": {
-    "name": "Alex Rhea"
-  },
+  "author": "Alex Rhea",
   "license": "Apache-2.0",
   "engines": {
     "node": ">= 10.3.0"
@@ -37,5 +33,16 @@
     "@aws-cdk/aws-iam": "^1.15.0",
     "@aws-cdk/core": "^1.15.0",
     "source-map-support": "^0.5.9"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arhea/aws-cdk-eks-cluster-autoscaler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arhea/aws-cdk-eks-cluster-autoscaler/issues"
+  },
+  "homepage": "https://github.com/arhea/aws-cdk-eks-cluster-autoscaler#readme"
 }
