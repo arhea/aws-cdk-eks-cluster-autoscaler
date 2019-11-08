@@ -1,5 +1,7 @@
 # AWS CDK EKS Cluster Autoscaler
 
+![CodeBuild Badge](https://codebuild.us-east-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiOHRQR0pkeTcvUjVlcjBWOW9VeGtKamRLdHR4L29sM1NBd1hYRWNOc2lJamR0R25wOWVEMGJTRHpGVFlQTXRVWUx1SHZiQWY5UE1VaHZ1VHZveitNbzNNPSIsIml2UGFyYW1ldGVyU3BlYyI6IlJvNFQ4WS9TK3d5SlZpT2giLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+
 This module makes it easy to deploy and manage Cluster Autoscaler from AWS CDK for your EKS clusters. This module is designed based on the guidance provided in the [AWS documentation](https://docs.aws.amazon.com/en_pv/eks/latest/userguide/cluster-autoscaler.html). This Construct will perform the following tasks:
 
 - Add `k8s.io/cluster-autoscaler/<cluster-name>` and `k8s.io/cluster-autoscaler/enabled` tags to your autoscaling groups
