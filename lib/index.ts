@@ -3,22 +3,57 @@ import eks = require('@aws-cdk/aws-eks');
 import iam = require('@aws-cdk/aws-iam');
 import autoscaling = require('@aws-cdk/aws-autoscaling');
 
+/**
+ * The properties for the Cluster Autoscaler.
+ */
 export interface ClusterAutoscalerProps {
 
+  /**
+   * The EKS cluster to deploy the cluster autoscaler to.
+   *
+   * @default none
+   */
   cluster: eks.Cluster;
 
+  /**
+   * An array of Autoscaling Groups, known as node groups, to configure for autoscaling.
+   *
+   * @default none
+   */
   nodeGroups: Array<autoscaling.AutoScalingGroup>;
 
+  /**
+   * The version of the Cluster Autoscaler to deploy.
+   *
+   * @default v1.14.6
+   */
   version?: String;
 
 }
 
+/**
+ * The Cluster Autoscaler Construct. This will create a new IAM Policy, add labels to the ASGs, and
+ * deploy the Cluster Autoscaler manifest.
+ */
 export class ClusterAutoscaler extends cdk.Construct {
 
-  policy: iam.Policy
+  /**
+   *  The IAM policy created by this construct.
+   */
+  public readonly policy: iam.Policy
 
-  clusterautoscaler: eks.KubernetesResource
+  /**
+   * The Kubernetes Resource that defines the Cluster Autoscaler K8s resources.
+   */
+  public readonly clusterAutoscaler: eks.KubernetesResource
 
+  /**
+   * Constructs a new instance of the Cluster Autoscaler.
+   *
+   * @param scope cdk.Construct
+   * @param id string
+   * @param props ClusterAutoscalerProps
+   */
   constructor(scope: cdk.Construct, id: string, props: ClusterAutoscalerProps) {
     super(scope, id);
 
@@ -55,7 +90,7 @@ export class ClusterAutoscaler extends cdk.Construct {
     });
 
     // define the Kubernetes Cluster Autoscaler manifests
-    this.clusterautoscaler = new eks.KubernetesResource(this, 'cluster-autoscaler-manifest', {
+    this.clusterAutoscaler = new eks.KubernetesResource(this, 'cluster-autoscaler-manifest', {
       cluster: props.cluster,
       manifest: [
         {
