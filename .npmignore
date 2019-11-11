@@ -1,5 +1,6 @@
 *.ts
 !*.d.ts
+*.yml
 
 # CDK asset staging directory
 .cdk.staging
